@@ -1,0 +1,44 @@
+const mutations={
+
+  SET_CONFIG(state,config){
+    console.log(config);
+    state.config=config;
+  },
+  SET_HEADER_TITLE(state,title){
+    state.headerTitle=title;
+  },
+  SET_STYLE_TYPE(state,styleType){
+    state.styleType=styleType
+  },
+  SET_TEMPLATETYPE(state,templateType){
+    state.templateType=templateType
+  },
+  SET_REALTIME_DATA(state,realTimeData){
+    //console.log(realTimeData);
+    state.realTimeData=realTimeData;
+    console.log(state.realTimeData);
+  },
+  SET_TREND_LAYOUT(state,layout){
+    //console.log(layout);
+    state.trendStyle.trendWidth=layout.width;
+    state.trendStyle.trendHeight=layout.height;
+    console.log(state.trendStyle);
+  },
+  SET_LINE_CHART_TYPE(state,chartType){
+    //console.log(chartType);
+    state.trendStyle.lineChartType=chartType;
+  },
+  SET_STATISTICAL_LAYOUT(state,layout){
+    //console.log(layout);
+    state.statisticalStyle.statisticalWidth=layout.width;
+    state.statisticalStyle.statisticalHeight=layout.height;
+  },
+  SET_STATISTICAL_TYPE(state,statisticalType){
+    console.log(statisticalType);
+    state.statisticalStyle.statisticalType=statisticalType;
+  },
+  SET_IS_CONFIG(state,status){
+    state.isConfig=status;
+  }
+}
+export default mutations;
