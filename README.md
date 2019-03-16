@@ -1,6 +1,5 @@
 # data-visualization-demo
 
-> 
 
 ## Build Setup
 
