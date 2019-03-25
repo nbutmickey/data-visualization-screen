@@ -48,4 +48,6 @@ export default {
 <style lang="less">
   @import "../style/index.less";
   @import "../style/normalize.less";
+  @import "assets/font/digital/stylesheet.css";
+  @import "assets/font/acens/stylesheet.css";
 </style>

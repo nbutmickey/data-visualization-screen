@@ -3,34 +3,20 @@
   <p class="title">- {{config.showTitle}} -</p>
   <v-chart  :width="width"  :height="height" :padding="padding"  :data="sourceData" >
     <v-tooltip />
-    <v-axis data-key="key" :label="label" />
-    <v-axis data-key="value" :label="label" :line="{strokeOpacity:1}" :tickLine="{strokeOpacity:1}" :grid="null"/>
-    <v-line position="key*value" shape="hv" />
+    <v-axis data-key="tick" :label="label" />
+    <v-axis data-key="count" :label="label" :line="{strokeOpacity:1}" :tickLine="{strokeOpacity:1}" :grid="null"/>
+    <v-line position="tick*count" shape="hv" />
   </v-chart>
   </div>
 </template>
 
 <script>
-  const data = [
-    { key: 'Jan', value: 12312351 },
-    { key: 'Feb', value: 3123291 },
-    { key: 'Mar', value: 5345343 },
-    { key: 'Apr', value: 5354542 },
-    { key: 'May', value: 423463 },
-    { key: 'June', value: 6546458 },
-    { key: 'July', value: 6546455 },
-    { key: 'Aug', value: 534577 },
-    { key: 'Sep', value: 953459 },
-    { key: 'Oct', value: 535106 },
-    { key: 'Nov', value: 853458 },
-    { key: 'Dec', value: 534556 },
-  ];
     export default {
         name: "index",
         props:['height','width','config'],
         data(){
           return{
-            sourceData:data,
+            sourceData:[],
             padding:[10,'auto',40,'auto'],
             label:{
                 textStyle:{
@@ -41,17 +27,16 @@
         },
         mounted(){
           //页面挂载完毕，获取数据
-          //this.fetchData();
+          this.fetchData();
         },
         methods:{
           //拉取数据
           async fetchData() {
-            const {status,message,results}=await this.$store.dispatch(`${this.dataType}`,{type:this.type,interval:this.interval,page:this.page});
+            const {status,message,result}=await this.$store.dispatch(this.config.fetchDataType,{type:this.config.type,detailDate:this.config.detailDate,page:this.config.page});
             if(status){
-              let resData=JSON.parse(JSON.stringify(results).replace(/tick/g,'key').replace(/count/g,'value'));
-              this.sourceData=resData;
+              //let resData=JSON.parse(JSON.stringify(results).replace(/tick/g,'key').replace(/count/g,'value'));
+              this.sourceData=result;
             }else{
-              console.log(message);
               alert(message);
             }
           }

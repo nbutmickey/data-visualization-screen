@@ -4,32 +4,22 @@
     <p class="title">- {{config.showTitle}} -</p>
     <v-chart :width="width" :height="height" :data="sourceData" :padding="padding">
       <v-tooltip />
-      <v-axis data-key="year" :label="label"/>
-      <v-axis data-key="sales" :label="label" :grid="null"/>
-      <v-bar position="year*sales" />
+      <v-axis data-key="item" :label="label"/>
+      <v-axis data-key="count" :label="label" :line="{strokeOpacity:1}" :tickLine="{strokeOpacity:1}"  :grid="null"/>
+      <v-bar position="item*count" />
     </v-chart>
   </div>
 </template>
 
 <script>
-  const data = [
-    { year: '1951 年', sales: 38 },
-    { year: '1952 年', sales: 52 },
-    { year: '1956 年', sales: 61 },
-    { year: '1957 年', sales: 145 },
-    { year: '1958 年', sales: 48 },
-    { year: '1959 年', sales: 38 },
-    { year: '1960 年', sales: 38 },
-    { year: '1962 年', sales: 38 },
-  ];
+
     export default {
         name: "index",
         props:['width','height','config'],
         data(){
           return {
-            title:'简单柱状图',
-            sourceData:data,
-            padding:[10,'auto',20,'auto'],
+            sourceData:[],
+            padding:[10,'auto',35,'auto'],
             label:{
               textStyle:{
                 fill:'#fff'
@@ -38,16 +28,51 @@
           }
         },
         mounted(){
-          //this.fetchData();
+          this.fetchData();
         },
         methods:{
-          async fetchData(){
-            let {status,message,data}=await this.$store.dispatch('',params);
-            if(status){
-              this.sourceData=data;
-            }else{
-              alert(message);
-              console.log(message);
+          async fetchData() {
+            let fetchDataType = this.config.fetchDataType;
+            if (fetchDataType === 'statisticalDataTweleve'||fetchDataType === 'statisticalDataThirteen') {
+              let {status, message, result} = await this.$store.dispatch('statisticalDataFive');
+              if (status) {
+                this.sourceData=result;
+              }else{
+                alert(message)
+              }
+            } else if(fetchDataType === 'statisticalDataFourteen'){
+              let {status, message, result} = await this.$store.dispatch('statisticalDataSix');
+              if(status){
+                this.sourceData=result;
+              }else{
+                alert(message);
+              }
+            } else if (fetchDataType === 'statisticalDataEight'||fetchDataType === 'statisticalDataNine') {
+              let {status, message, result} = await this.$store.dispatch('statisticalDataTwo');
+              let {browser,os}=result;
+              if (status) {
+                if(fetchDataType === 'statisticalDataEight'){
+                  this.sourceData = browser;
+                }else{
+                  this.sourceData = os;
+                }
+              }else{
+                alert(message);
+              }
+            }else if(fetchDataType === 'statisticalDataTen'){
+              let {status, message, result} = await this.$store.dispatch('statisticalDataThree');
+              if (status){
+                this.sourceData = result;
+              }else{
+                alert(message);
+              }
+            }else if(fetchDataType==='statisticalDataEleven'){
+              let {status, message, result} = await this.$store.dispatch('statisticalDataFour');
+              if (status){
+                this.sourceData = result;
+              }else{
+               alert(message);
+              }
             }
           }
         }

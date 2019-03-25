@@ -31,56 +31,18 @@
         },
       mounted(){
         //页面挂载完毕，获取数据
-        //this.fetchData();
-        const data2=[
-          { tick: 'Jan', google: 1237,baidu: 2323,yaho:2321,bing:623},
-          { tick: 'Feb', google: 1127,baidu: 2223,yaho:2321,bing:313},
-          { tick: 'Mar', google: 3237,baidu: 4323,yaho:1621,bing:923},
-          { tick: 'Apr', google: 3537,baidu: 6223,yaho:3321,bing:943},
-          { tick: 'May', google: 1737,baidu: 213,yaho:6321,bing:823},
-          { tick: 'Jun', google: 2137,baidu: 2373,yaho:2321,bing:423},
-          { tick: 'Jul', google: 3123,baidu: 232,yaho:7321,bing:623},
-          { tick: 'Aug', google: 6342,baidu: 2023,yaho:1825,bing:853},
-          { tick: 'Sep', google: 4534,baidu: 2323,yaho:1321,bing:988},
-          { tick: 'Oct', google: 1323,baidu: 1123,yaho:1831,bing:733},
-          { tick: 'Nov', google: 4567,baidu: 2323,yaho:1321,bing:556},
-          { tick: 'Dec', google: 9145,baidu: 2323,yaho:1756,bing:226},
-        ]
-        const dv = new DataSet.View().source(data2);
-        this.sourceData=dv.transform({
-          type: 'fold',
-          fields: ['google','baidu','yaho','bing'],
-          key: 'search',
-          value: 'value',
-        }).rows;
+        this.fetchData();
       },
       methods:{
           async fetchData() {
-            const data2=[
-              { tick: 'Jan', google: 1237,baidu: 2323,yaho:2321,bing:623},
-              { tick: 'Feb', google: 1127,baidu: 2223,yaho:2321,bing:313},
-              { tick: 'Mar', google: 3237,baidu: 4323,yaho:1621,bing:923},
-              { tick: 'Apr', google: 3537,baidu: 6223,yaho:3321,bing:943},
-              { tick: 'May', google: 1737,baidu: 213,yaho:6321,bing:823},
-              { tick: 'Jun', google: 2137,baidu: 2373,yaho:2321,bing:423},
-              { tick: 'Jul', google: 3123,baidu: 232,yaho:7321,bing:623},
-              { tick: 'Aug', google: 6342,baidu: 2023,yaho:1825,bing:853},
-              { tick: 'Sep', google: 4534,baidu: 2323,yaho:1321,bing:988},
-              { tick: 'Oct', google: 1323,baidu: 1123,yaho:1831,bing:733},
-              { tick: 'Nov', google: 4567,baidu: 2323,yaho:1321,bing:556},
-              { tick: 'Dec', google: 9145,baidu: 2323,yaho:1756,bing:226},
-            ]
-            const dv = new DataSet.View().source(data2);
-            this.sourceData=dv.transform({
-              type: 'fold',
-              fields: ['google','baidu','yaho','bing'],
-              key: 'search',
-              value: 'value',
-            }).rows;
-            console.log(this.sourceData);
-            const {status,message,results}=await this.$store.dispatch(`${this.dataType}`,{type:this.type,interval:this.interval,page:this.page});
+            const {status,message,result}=await this.$store.dispatch(this.config.fetchDataType,{type:this.config.type,detailDate:this.config.detailDate,page:this.config.page});
             if(status){
-              this.sourceData=results;
+              this.sourceData=new DataSet.View().source(result).transform({
+                type: 'fold',
+                fields: ['google','baidu','yaho','bing'],
+                key: 'search',
+                value: 'value',
+              }).rows;
             }else{
               console.log(message);
               alert(message);

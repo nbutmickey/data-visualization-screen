@@ -4,14 +4,14 @@
     <p class="title">- {{config.showTitle}} -</p>
     <div class="ringdigram-box">
       <div class="statisticalPanel">
-        <div v-for="(item,index) in data" :key="index" class="panel-item"><span>{{item.item}}</span><span>{{item.count}}</span></div>
+        <div v-for="(item,index) in data" :class="/^[2-3].{2,}/.test(item.item)?'success-color':'fail-color'" :key="index" class="panel-item"><span>{{item.item}}</span><span>{{item.count}}</span></div>
       </div>
       <div style="width: 70%">
         <v-chart :forceFit="true" :height="height" :data="sourceData" :scale="scale" :padding="padding">
           <v-tooltip :showTitle="false" dataKey="item*percent" />
           <v-legend dataKey="item" position="bottom" :textStyle="{fill:'#ffff'}"/>
           <v-pie position="percent" color="item" :label="labelConfig"/>
-          <v-coord type="theta" :radius="0.75" :innerRadius="0.5" />
+          <v-coord type="theta" :radius="0.75" :innerRadius="0.6" />
         </v-chart>
       </div>
     </div>
@@ -20,20 +20,13 @@
 
 <script>
   const DataSet = require('@antv/data-set');
-  const data = [
-    { item: 'POST', count: 40 },
-    { item: 'GET', count: 21 },
-    { item: 'PUT', count: 17 },
-    { item: 'DELETE', count: 13 },
-  ];
     export default {
         name: "index",
         props:['width','height','config'],
         data(){
           return {
-            title:'环形对比图',
             padding:[15,'auto',60,'auto'],
-            data:data,
+            data:[],
             scale:[{
               dataKey: 'percent',
               min: 0,
@@ -51,20 +44,27 @@
           }
         },
         mounted(){
-
-          this.sourceData=new DataSet.View().source(this.data).transform({
-            type: 'percent',
-            field: 'count',
-            dimension: 'item',
-            as: 'percent'
-          }).rows;
+          this.fetchData();
         },
         methods:{
           async fetchData(){
-            let {status,message,data}=await this.$store.dispatch('',params);
+            let fetchDataType = this.config.fetchDataType;
+            let {status,message,result} = await this.$store.dispatch(fetchDataType);
             if(status){
-              this.data=data;
-              this.sourceData=new DataSet.View().source(data).transform({
+              //console.log(typeof result);
+              if(fetchDataType==='statisticalDataThree'){
+                //this.data=result.sort((a,b)=>{return b.count-a.count});
+                let newResult=[...result];
+                this.data=newResult.slice(0,5);
+              }else if(fetchDataType==='statisticalDataFour'){
+                let newResult=[];
+                newResult=result.filter((item)=>{if(item.item==='200'||item.item==='404'||item.item==='304'||item.item==='301'||item.item==='403'||item.item==='400'||item.item==='500') return true;else return false;})
+                this.data=newResult.sort((a,b)=>{return b.count-a.count})
+              }else{
+                this.data=result;
+              }
+              //this.data=result;
+              this.sourceData=new DataSet.View().source(result).transform({
                 type: 'percent',
                 field: 'count',
                 dimension: 'item',
@@ -72,7 +72,7 @@
               }).rows;
             }else{
               alert(message);
-              console.log(message);
+              //console.log(message);
             }
           }
         },
@@ -94,7 +94,8 @@
       .panel-item{
         width: 100%;
         display: flex;
-        justify-content: space-around;
+        padding: 0 30px;
+        justify-content: space-between;
         span:first-child  {
           font-size: 16px;
         }
@@ -105,6 +106,13 @@
         }
       }
     }
+  }
+
+  .success-color{
+    color: #67C23A;
+  }
+  .fail-color{
+    color:#F56C6C
   }
   .title{
     font-size: 14px;

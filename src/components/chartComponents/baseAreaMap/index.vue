@@ -13,24 +13,13 @@
 </template>
 
 <script>
-  const data = [
-    { tick: '1991', count: 15468 },
-    { tick: '1992', count: 16100 },
-    { tick: '1993', count: 15900 },
-    { tick: '1994', count: 17409 },
-    { tick: '1995', count: 17000 },
-    { tick: '1996', count: 31056 },
-    { tick: '1997', count: 31982 },
-    { tick: '1998', count: 32040 },
-    { tick: '1999', count: 33233 },
-  ];
     export default {
         name: "index",
         props:['height','width','config'],
         data(){
           return {
               padding:[10,'auto',35,'auto'],
-              sourceData:data,
+              sourceData:[],
               label:{
                 textStyle:{
                   fill:'#fff',
@@ -39,23 +28,20 @@
           }
         },
       mounted(){
-        //this.fetchData();
+        this.fetchData();
       },
       methods:{
           //获取数据
           async fetchData() {
-
             //转化后端数据
-            let resData=JSON.parse(JSON.stringify(data).replace(/tick/g,'key').replace(/count/g,'value'));
-            this.sourceData=resData;
-            const {status,message,results}=await this.$store.dispatch(`${this.dataType}`,{type:this.type,interval:this.interval,page:this.page});
-            if(status){
-              let resData=JSON.parse(JSON.stringify(results).replace(/tick/g,'key').replace(/count/g,'value'));
-              this.sourceData=resData;
-            }else{
-              console.log(message);
-              alert(message)
-            }
+            console.log(this.config);
+              const {status,message,result}=await this.$store.dispatch(this.config.fetchDataType,{type:this.config.type,detailDate:this.config.detailDate,page:this.config.page});
+              if(status){
+                this.sourceData=result;
+              }else{
+                alert(message);
+              }
+
           }
       },
     }

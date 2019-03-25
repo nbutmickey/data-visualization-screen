@@ -1,113 +1,168 @@
 import axios from 'axios'
 
 const actions={
-    statisticalDataOne({commit},params){
+    getWeather(){
       return new Promise((resolve,reject)=>{
         axios({
           method:'GET',
-          url:`/api/reqMethodNum`
+          url:`/apiWeather/index?cityname=宁波&key=cd7737ed5458e0dfed153813ba755796`
         }).then(res=>{
-          resolve(res);
+          resolve(res.data);
         })
       })
     },
-    statisticalDataTwo({commit},params){
+
+    getPVNumber(){
       return new Promise((resolve,reject)=>{
         axios({
           method:'GET',
-          url: `/api/clientBrowserOs`,
+          url:`/easy-mock/getRealTimePVNumber`
         }).then(res=>{
-          resolve(res)
+          resolve(res.data);
         })
       })
     },
-    statisticalDataThree({commit},params){
+    getUVNumber(){
+      return new Promise((resolve,reject)=>{
+      axios({
+        method:'GET',
+        url:`/easy-mock/getRealTimeUVNumber`
+      }).then(res=>{
+        resolve(res.data)
+      })
+    })
+    },
+    getRealTimeRecord(){
+      return new Promise((resolve,reject)=>{
+      axios({
+        method:'GET',
+        url:`/easy-mock/realTimeRecord`
+      }).then(res=>{
+        resolve(res.data)
+      })
+    })
+    },
+
+
+    statisticalDataOne(){
       return new Promise((resolve,reject)=>{
         axios({
           method:'GET',
-          url: `/api/ipByProvinceNum`,
+          url:`/easy-mock/getReqMethodNum`
         }).then(res=>{
-          resolve(res)
+          resolve(res.data);
         })
       })
     },
-    statisticalDataFour({commit},params){
+    statisticalDataTwo(){
       return new Promise((resolve,reject)=>{
         axios({
           method:'GET',
-          url: `/api/httpStatusNum`,
+          url: `/easy-mock/getClientBrowserOs`,
         }).then(res=>{
-          resolve(res)
+          resolve(res.data)
         })
       })
     },
-    statisticalDataFive({commit},type){
+    statisticalDataThree(){
       return new Promise((resolve,reject)=>{
         axios({
           method:'GET',
-          url: `/api/failLoadPageMost?type=${type}`,
+          url: `/easy-mock/getIpByProvinceNum`,
         }).then(res=>{
-          resolve(res)
+          resolve(res.data)
         })
       })
     },
-    statisticalDataSix({commit},params){
+    statisticalDataFour(){
       return new Promise((resolve,reject)=>{
         axios({
           method:'GET',
-          url: `/api/mostPopularPage`,
+          url: `/easy-mock/getHttpStatusNum`,
         }).then(res=>{
-          resolve(res)
+          resolve(res.data)
         })
       })
     },
-    trendDataOne({commit},params){
+    statisticalDataFive(){
       return new Promise((resolve,reject)=>{
         axios({
           method:'GET',
-          url:`/api/pvNum?type=${params.type}&interval=${params.interval}`
+          url: `/easy-mock/getFailLoadPageMost`,
         }).then(res=>{
-          resolve(res)
+          resolve(res.data)
         })
       })
     },
-  trendDataTwo({commit},params){
+    statisticalDataSix(){
+      return new Promise((resolve,reject)=>{
+        axios({
+          method:'GET',
+          url: `/easy-mock/getMostPopularPage`,
+        }).then(res=>{
+          resolve(res.data)
+        })
+      })
+    },
+    statisticalDataFifteen(){
+      return new Promise((resolve,reject)=>{
+        axios({
+          method:'GET',
+          url:`/easy-mock/getClientServerFailNumber`
+        }).then(res=>{
+          resolve(res.data)
+        })
+      })
+    },
+
+
+    trendDataOne(params){
+      return new Promise((resolve,reject)=>{
+        axios({
+          method:'GET',
+          url:`/easy-mock/getAllPv?type=${params.type}&detailDate=${params.detailDate}`
+        }).then(res=>{
+          resolve(res.data)
+        })
+      })
+    },
+  trendDataTwo(params){
     return new Promise((resolve,reject)=>{
       axios({
         method:'GET',
-        url:`/api/pagePvNum?type=${params.type}&interval=${params.interval}&page=${params.page}`
+        url:`/easy-mock/getPagePv?type=${params.type}&detailDate=${params.detailDate}&page=${params.page}`
       }).then(res=>{
-        resolve(res)
+        resolve(res.data)
       })
     })
   },
-  trendDataThree({commit},params){
+  trendDataThree(params){
     return new Promise((resolve,reject)=>{
       axios({
         method:'GET',
-        url:`/api/clientFailPvNum?type=${params.type}&interval=${params.interval}`
+        url:`/easy-mock/getClientFailPvNum?type=${params.type}&detailDate=${params.detailDate}`
       }).then(res=>{
-        resolve(res)
+        resolve(res.data)
       })
     })
   },
-  trendDataFour({commit},params){
+  trendDataFour(params){
     return new Promise((resolve,reject)=>{
       axios({
         method:'GET',
-        url:`/api/serviceFailPvNum?type=${params.type}&interval=${params.interval}`
+        url:`/easy-mock/getServiceFailPvNum?type=${params.type}&detailDate=${params.detailDate}`
       }).then(res=>{
-        resolve(res)
+        resolve(res.data)
       })
     })
   },
-  trendDataFive({commit},params){
+  trendDataFive(params){
     return new Promise((resolve,reject)=>{
       axios({
         method:'GET',
-        url:`/api/spiderPvNum?type=${params.type}&interval=${params.interval}`
+        url:`/easy-mock/getSpiderPvNum?type=${params.type}&detailDate=${params.detailDate}`
       }).then(res=>{
-        resolve(res)
+        resolve(res.data)
       })
     })
   },

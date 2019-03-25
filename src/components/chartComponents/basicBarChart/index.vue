@@ -2,32 +2,24 @@
   <!--基础条形图(纵向)-->
   <div>
     <p class="title">- {{config.showTitle}} -</p>
-    <v-chart :width="width" :height="height" :data="sourceData" :padding="padding">
+    <v-chart :width="width" :height="height" :padding="padding" :data="sourceData">
       <v-coord type="rect" direction="LB" />
       <v-tooltip />
-      <v-axis dataKey="country" :label="label" />
-      <v-axis dataKey="population" :label="label" :line="{strokeOpacity:1}" :tickLine="{strokeOpacity:1}" :grid="null"/>
-      <v-bar position="country*population" />
+      <v-axis data-key="item" :label="label" />
+      <v-axis data-key="count" :label="label" :line="{strokeOpacity:1}" :tickLine="{strokeOpacity:1}"  :grid="null"/>
+      <v-bar position="item*count" />
     </v-chart>
   </div>
 </template>
 
 <script>
-  const DataSet = require('@antv/data-set');
-  const data = [
-    { country: '中国', population: 1344 },
-    { country: '印度', population: 1970 },
-    { country: '美国', population: 2034 },
-    { country: '印尼', population: 2489 },
-    { country: '巴西', population: 1803 },
-  ];
+  //const DataSet = require('@antv/data-set');
     export default {
         props:['width','height','config'],
         name: "index",
         data(){
           return {
             sourceData:[],
-            data:data,
             padding:[10,'auto',15,'auto'],
             label:{
               offset:12,
@@ -38,31 +30,55 @@
           }
         },
         mounted(){
-          //this.fetchData();
-          this.sourceData=new DataSet.View().source(data).transform({
-            type: 'sort',
-            callback(a, b) {
-              return a.count - b.count > 0;
-            },
-          }).rows;
+          this.fetchData();
         },
-        methods:{
-          async fetchData(){
-            let {status,message,data}=await this.$store.dispatch('',parmas);
-            if(status){
-              const dv = new DataSet.View().source(data);
-              this.sourceData=dv.transform({
-                type: 'sort',
-                callback(a, b) {
-                  return a.count - b.count > 0;
-                },
-              }).rows;
-            }else{
-              console.log(message);
-              alert(message);
+        methods: {
+          async fetchData() {
+            let fetchDataType = this.config.fetchDataType;
+            if (fetchDataType === 'statisticalDataTweleve'||fetchDataType === 'statisticalDataThirteen') {
+              let {status, message, result} = await this.$store.dispatch('statisticalDataFive');
+              if (status) {
+                this.sourceData=result;
+              }else{
+                alert(message)
+              }
+            } else if(fetchDataType === 'statisticalDataFourteen'){
+              let {status, message, result} = await this.$store.dispatch('statisticalDataSix');
+              if(status){
+                this.sourceData=result;
+              }else{
+                alert(message);
+              }
+            } else if (fetchDataType === 'statisticalDataEight'||fetchDataType === 'statisticalDataNine') {
+              let {status, message, result} = await this.$store.dispatch('statisticalDataTwo');
+              let {browser,os}=result;
+              if (status) {
+                if(fetchDataType === 'statisticalDataEight'){
+                  this.sourceData = browser;
+                }else{
+                  this.sourceData = os;
+                }
+              }else{
+                alert(message);
+              }
+            }else if(fetchDataType === 'statisticalDataTen'){
+              let {status, message, result} = await this.$store.dispatch('statisticalDataThree');
+              if (status){
+                this.sourceData = result;
+              }else{
+                alert(message);
+              }
+            }else if(fetchDataType==='statisticalDataEleven'){
+              let {status, message, result} = await this.$store.dispatch('statisticalDataFour');
+              if (status){
+                this.sourceData = result;
+              }else{
+                alert(message);
+              }
             }
           }
-        }
+
+          }
     }
 </script>
 

@@ -38,7 +38,6 @@
         name: "index",
         data(){
           return {
-            title:'客户端操作系统和浏览器对比',
             sourceData:[],
             sourceData2:[],
             scale:[{
@@ -46,13 +45,13 @@
               min: 0,
               formatter: '.0%',
             }],
-            padding:[10,'auto',50,'auto'],
+            padding:[10,'auto',65,'auto'],
             labelConfig: ['percent', {
               offset: -40,
               textStyle: {
                 rotate: 0,
                 textAlign: 'center',
-                fill:'#000',
+                fill:'#ffffff',
                 fontSize:12,
                 fontWeight:500,
                 shadowBlur: 2,
@@ -62,34 +61,52 @@
           }
         },
         mounted(){
-          const data = [
-            { item: 'Linux', count: 40 },
-            { item: 'Windows', count: 21 },
-            { item: 'MAC OS', count: 17 },
-            { item: 'UNIX', count: 13 },
-          ];
-          const data2 = [
-            { item: 'Chrome', count: 170 },
-            { item: 'Safari', count: 40 },
-            { item: 'FireFox', count: 27 },
-            { item: 'Edge', count: 43 },
-          ];
-          this.sourceData=new DataSet.View().source(data).transform({
-            type: 'percent',
-            field: 'count',
-            dimension: 'item',
-            as: 'percent'
-          }).rows;
-          this.sourceData2=new DataSet.View().source(data2).transform({
-            type: 'percent',
-            field: 'count',
-            dimension: 'item',
-            as: 'percent'
-          }).rows;
+          this.fetchData();
         },
         methods:{
           async fetchData(){
+            let fetchDataType = this.config.fetchDataType;
+            if(fetchDataType==='statisticalDataTwo'){
+              //静态数据模拟
+              let {status,message,result} = await this.$store.dispatch(fetchDataType);
+              if(status){
+                let {browser,os}=result;
+                this.sourceData=new DataSet.View().source(browser).transform({
+                  type: 'percent',
+                  field: 'count',
+                  dimension: 'item',
+                  as: 'percent'
+                }).rows;
+                this.sourceData2=new DataSet.View().source(os).transform({
+                  type: 'percent',
+                  field: 'count',
+                  dimension: 'item',
+                  as: 'percent'
+                }).rows;
+              }else{
+                alert(message);
+              }
 
+            }else if(fetchDataType==='statisticalDataFive'){
+              let {status,message,result} = await this.$store.dispatch(fetchDataType);
+              if(status){
+                let {client,server}=result;
+                this.sourceData=new DataSet.View().source(client).transform({
+                  type: 'percent',
+                  field: 'count',
+                  dimension: 'item',
+                  as: 'percent'
+                }).rows;
+                this.sourceData2=new DataSet.View().source(server).transform({
+                  type: 'percent',
+                  field: 'count',
+                  dimension: 'item',
+                  as: 'percent'
+                }).rows;
+              }else{
+                console.log(message);
+              }
+            }
           }
         }
     }

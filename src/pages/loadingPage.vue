@@ -16,6 +16,40 @@
         watch:{
           isConfig(val){
             if(val){
+              //console.log(this.config);
+              switch (parseInt(this.config.templateType)){
+                case 1:
+                  this.config.trendConfig.trendWidth='490';
+                  this.config.trendConfig.trendHeight='250';
+                  this.config.statisticalConfig.statisticalWidth='740';
+                  this.config.statisticalConfig.statisticalHeight='260';
+                  break;
+                case 2:
+                  this.config.trendConfig.trendWidth='670';
+                  this.config.trendConfig.trendHeight='300';
+                  this.config.statisticalConfig.statisticalWidth='850';
+                  this.config.statisticalConfig.statisticalHeight='260';
+                  break;
+                case 3:
+                  this.config.trendConfig.trendWidth='670';
+                  this.config.trendConfig.trendHeight='340';
+                  this.config.statisticalConfig.statisticalWidth='850';
+                  this.config.statisticalConfig.statisticalHeight='260';
+                  break;
+                case 4:
+                  this.config.trendConfig.trendWidth='820';
+                  this.config.trendConfig.trendHeight='340';
+                  this.config.statisticalConfig.statisticalWidth='800';
+                  this.config.statisticalConfig.statisticalHeight='360';
+                  break;
+                case 5:
+                  this.config.trendConfig.trendWidth='650';
+                  this.config.trendConfig.trendHeight='340';
+                  this.config.statisticalConfig.statisticalWidth='650';
+                  this.config.statisticalConfig.statisticalHeight='350';
+                  break;
+              }
+              console.log(this.config);
               this.$store.commit('SET_HEADER_TITLE',this.config.headerTitle);
               this.$store.commit('SET_STYLE_TYPE',this.config.styleType);
               this.$store.commit('SET_TEMPLATETYPE',this.config.templateType);

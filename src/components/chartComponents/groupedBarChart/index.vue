@@ -6,7 +6,7 @@
       <v-coord type="rect" direction="LT" />
       <v-tooltip />
       <v-legend :position="position"/>
-      <v-axis dataKey="value" :label="label" :line="{strokeOpacity:1}" :tickLine="{strokeOpacity:1}" position="right" :grid="null"/>
+      <v-axis dataKey="value" :label="label" :line="{strokeOpacity:1}" :tickLine="{strokeOpacity:1}"  position="right" :grid="null"/>
       <v-axis dataKey="label" :label="label"  />
       <v-bar position="label*value" color="type" :adjust="adjust" />
     </v-chart>
@@ -33,31 +33,20 @@
           }
         },
         mounted(){
-          const data = [
-            { label: 'Mon.', series1: 2800, series2: 2260 },
-            { label: 'Tues.', series1: 1800, series2: 1300 },
-            { label: 'Wed.', series1: 950, series2: 900 },
-            { label: 'Thur.', series1: 500, series2: 390 },
-            { label: 'Fri.', series1: 170, series2: 100 },
-          ];
-          const dv = new DataSet.View().source(data);
-          this.sourceData=dv.transform({
-            type: 'fold',
-            fields: ['series1', 'series2'],
-            key: 'type',
-            value: 'value',
-          }).rows;
+            this.fetchData();
         },
         methods:{
-          // async fetchData(){
-          //   let {status,message,data}=await this.$store.dispatch('',params);
-          //   if(status){
-          //
-          //   }else{
-          //     alert(message);
-          //     console.log(message);
-          //   }
-          // }
+          async fetchData(){
+              // let fetchDataType = this.config.fetchDataType;
+              // let {status,message,result}=await this.$store.dispatch(fetchDataType,{});
+              // if(status){
+              //
+              // }else{
+              //   alert(message);
+              //   console.log(message);
+              // }
+            }
+
         }
     }
 </script>
